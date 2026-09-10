@@ -1,6 +1,6 @@
 # Data Model Reference
 
-**Status:** Features 1–3 — `users`, `sessions`, `lists`, and `todos` tables.
+**Status:** Features 1–4 — `users`, `sessions`, `lists`, and `todos` tables.
 
 Update this file when a feature that defines schema merges to `dev`.
 
@@ -11,12 +11,12 @@ Update this file when a feature that defines schema merges to `dev`.
 | Field | Type | Rules |
 |-------|------|-------|
 | `id` | INTEGER PK | Auto-increment |
-| `fName` | STRING | Required |
-| `lName` | STRING | Required |
-| `email` | STRING | Required, unique |
-| `username` | STRING(100) | Required, unique; stored lowercase |
-| `password` | STRING(255) | Required; bcrypt hash only (`defaultScope` excludes from queries) |
-| `role` | STRING(20) | Default `worker` |
+| `fName` | STRING | Required; editable via `PUT /todo/users/:id` |
+| `lName` | STRING | Required; editable via `PUT /todo/users/:id` |
+| `email` | STRING | Required, unique; editable via `PUT /todo/users/:id` |
+| `username` | STRING(100) | Required, unique; stored lowercase; editable via `PUT /todo/users/:id` |
+| `password` | STRING(255) | Required; bcrypt hash only (`defaultScope` excludes from queries); optional on profile update |
+| `role` | STRING(20) | Default `worker`; read-only on profile API |
 
 ### `sessions`
 

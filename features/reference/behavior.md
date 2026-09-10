@@ -1,6 +1,6 @@
 # Behavior & Rules Reference
 
-**Living snapshot** of product rules currently in force after Features 1–3.
+**Living snapshot** of product rules currently in force after Features 1–4.
 
 These files answer: *"What rules does the app enforce right now?"*  
 They do **not** authorize new scope — implement only from `features/feature-*.md`.
@@ -23,7 +23,7 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Client session stored under `localStorage` key `user` | `Utils.setStore` / `removeItem` | Feature 1 AC |
 | Unauthenticated users cannot access non-auth routes | `router.beforeEach` → login | Feature 1 US-1.5 / Feature 2 US-2.5 |
 | Signed-in users hitting login/register are redirected home | `router.beforeEach` | Feature 1 US-1.3 |
-| `MenuBar` shows signed-in name + **Sign out**; hidden on login/register | `App.vue` + `MenuBar.vue` | Feature 2 Screen Requirements |
+| `MenuBar` shows a user-icon profile dropdown (name, username, email, **Edit Profile**, **Log out**); hidden on login/register | `App.vue` + `MenuBar.vue` | Feature 4 Screen Requirements |
 | Dashboard is a single-view lists UI (`Dashboard.vue`) — no sidebar split | `router` `home` → `Dashboard.vue` | Feature 2 FR-007 |
 | All list endpoints require authentication | `authenticate` on list routes | Feature 2 FR-001 |
 | List ownership is immutable; `userId` set only from `req.user.id` on create | List controller create | Feature 2 FR-002 / FR-004 |
@@ -46,3 +46,12 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Cross-user todo access → `404` `"Todo with id=<id> not found."` | `getAccessibleTodoOrNull` | Feature 3 US-3.5 |
 | Empty items dialog shows **"No todos in this list yet."** | `Dashboard.vue` | Feature 3 AC |
 | Completed todos show struck-through / muted title | `Dashboard.vue` | Feature 3 Screen Requirements |
+| Profile GET/PUT require authentication and self-access (`:id` = `req.user.id`) | `getAccessibleUserOrNull` | Feature 4 FR-001 / FR-002 |
+| Cross-user profile access → `404` `"User with id=<id> not found."` | `getAccessibleUserOrNull` | Feature 4 FR-003 |
+| Profile fields trimmed; empty required strings rejected | User controller | Feature 4 FR-004 |
+| Password optional on update; when provided, min 8 chars and bcrypt hash | User controller | Feature 4 FR-005 |
+| Username normalized `trim().toLowerCase()` on profile save | User controller | Feature 4 FR-006 |
+| Profile responses never include password hash | `toProfile` | Feature 4 FR-007 |
+| After profile save, `localStorage` `user` is refreshed and `user-logged-in` is dispatched | `MenuBar.vue` | Feature 4 FR-008 |
+| Edit Profile uses shared `emailRules` | `validation.js` + MenuBar dialog | Feature 4 FR-009 |
+| Logout lives only in the profile dropdown (**Log out**); no menu-bar **Sign out** | `MenuBar.vue` | Feature 4 US-4.3 / US-4.4 |

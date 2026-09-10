@@ -1,6 +1,6 @@
 # API Reference
 
-**Status:** Features 1–3 — auth, list CRUD, and todo item CRUD.
+**Status:** Features 1–4 — auth, list CRUD, todo item CRUD, and profile.
 
 API mount path: `/todo` (see `backend/server.js`).
 
@@ -20,6 +20,8 @@ API mount path: `/todo` (see `backend/server.js`).
 | `POST` | `/todo/lists/:listId/todos` | Yes | Add a todo to an owned list |
 | `PUT` | `/todo/todos/:id` | Yes | Update an owned todo (title and/or `completed`) |
 | `DELETE` | `/todo/todos/:id` | Yes | Delete an owned todo |
+| `GET` | `/todo/users/:id` | Yes | Fetch the authenticated user's own profile |
+| `PUT` | `/todo/users/:id` | Yes | Update the authenticated user's own profile |
 
 ### Auth success payload (register `201`, login `200`)
 
@@ -73,6 +75,35 @@ API mount path: `/todo` (see `backend/server.js`).
 { "title": "Buy milk" }
 ```
 
+### Profile success payload (`200`)
+
+```json
+{
+  "id": 42,
+  "fName": "Jane",
+  "lName": "Doe",
+  "email": "jane@example.com",
+  "username": "jdoe",
+  "role": "worker",
+  "createdAt": "2026-07-02T12:00:00.000Z",
+  "updatedAt": "2026-07-02T12:05:00.000Z"
+}
+```
+
+### Update profile request
+
+```json
+{
+  "fName": "Jane",
+  "lName": "Doe",
+  "email": "jane@example.com",
+  "username": "jdoe",
+  "password": "newpassword123"
+}
+```
+
+`password` is optional. Omit it to leave the current password unchanged.
+
 ### Error payload
 
 ```json
@@ -84,4 +115,4 @@ API mount path: `/todo` (see `backend/server.js`).
 - Flat JSON responses (no `{ success, data }` envelope).
 - Errors: `{ "message": "..." }`.
 - Authenticated routes: `Authorization: Bearer <token>`.
-- Cross-user list/todo access returns `404` (not `403`).
+- Cross-user list/todo/profile access returns `404` (not `403`).

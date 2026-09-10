@@ -80,3 +80,16 @@ export async function getAccessibleTodoOrNull(req, todoId) {
 
   return row ?? null;
 }
+
+/**
+ * Return the user when `:id` matches the authenticated user; otherwise null.
+ */
+export async function getAccessibleUserOrNull(req, userId) {
+  const id = parseInt(userId, 10);
+  if (Number.isNaN(id) || id !== req.user.id) {
+    return null;
+  }
+
+  const row = await User.findByPk(id);
+  return row ?? null;
+}
