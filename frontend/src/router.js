@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Utils from "./config/utils.js";
-import Home from "./views/Home.vue";
+import Dashboard from "./views/Dashboard.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 
@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: Home,
+      component: Dashboard,
     },
     {
       path: "/login",

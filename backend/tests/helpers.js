@@ -31,3 +31,15 @@ export const loginUser = async (credentials = {}) => {
   const res = await request(app).post("/todo/login").send(body);
   return { res, body };
 };
+
+export const authHeader = (token) => ({
+  Authorization: `Bearer ${token}`,
+});
+
+export const createList = async (token, name, extra = {}) => {
+  const res = await request(app)
+    .post("/todo/lists")
+    .set(authHeader(token))
+    .send({ name, ...extra });
+  return res;
+};

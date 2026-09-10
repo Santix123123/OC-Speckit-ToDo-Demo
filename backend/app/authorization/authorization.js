@@ -2,6 +2,7 @@ import db from "../models/index.js";
 
 const Session = db.session;
 const User = db.user;
+const List = db.list;
 
 /**
  * Validate Bearer token against the sessions table and attach req.user.
@@ -45,4 +46,20 @@ export async function authenticate(req, res, next) {
       .status(401)
       .send({ message: "Unauthorized! Unable to authenticate." });
   }
+}
+
+/**
+ * Return the list when it belongs to the authenticated user; otherwise null.
+ */
+export async function getAccessibleListOrNull(req, listId) {
+  const id = parseInt(listId, 10);
+  if (Number.isNaN(id)) {
+    return null;
+  }
+
+  const row = await List.findOne({
+    where: { id, userId: req.user.id },
+  });
+
+  return row ?? null;
 }

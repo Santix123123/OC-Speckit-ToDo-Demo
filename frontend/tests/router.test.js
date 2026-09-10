@@ -5,7 +5,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { createMemoryHistory, createRouter } from "vue-router";
 import Utils from "../src/config/utils.js";
-import Home from "../src/views/Home.vue";
+import Dashboard from "../src/views/Dashboard.vue";
 import Login from "../src/views/Login.vue";
 import Register from "../src/views/Register.vue";
 
@@ -13,7 +13,7 @@ async function createAppRouter(initialPath = "/") {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
-      { path: "/", name: "home", component: Home },
+      { path: "/", name: "home", component: Dashboard },
       { path: "/login", name: "login", component: Login },
       { path: "/register", name: "register", component: Register },
     ],

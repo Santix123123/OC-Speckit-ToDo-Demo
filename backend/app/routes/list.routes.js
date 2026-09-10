@@ -1,14 +1,12 @@
 import { Router } from "express";
+import listController from "../controllers/list.controller.js";
 import { authenticate } from "../authorization/authorization.js";
 
 const router = Router();
 
-/**
- * Feature 1 foundation: authenticated lists read returns an empty array.
- * Feature 2 owns list CRUD and ownership-filtered data.
- */
-router.get("/", [authenticate], (_req, res) => {
-  res.status(200).send([]);
-});
+router.get("/", [authenticate], listController.findAll);
+router.post("/", [authenticate], listController.create);
+router.put("/:listId", [authenticate], listController.update);
+router.delete("/:listId", [authenticate], listController.delete);
 
 export default router;
