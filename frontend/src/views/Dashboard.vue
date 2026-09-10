@@ -2,6 +2,12 @@
 import { onMounted, ref } from "vue";
 import listServices from "../services/listServices.js";
 import todoServices from "../services/todoServices.js";
+import {
+  optionalDueDateRules,
+  formatDueDate,
+  isTodoOverdue,
+  toDateInputValue,
+} from "../config/validation.js";
 
 const lists = ref([]);
 const loading = ref(false);
@@ -25,7 +31,9 @@ const todos = ref([]);
 const todosLoading = ref(false);
 const todosError = ref("");
 const newTodoTitle = ref("");
+const newTodoDueDate = ref("");
 const editTodoTitle = ref("");
+const editTodoDueDate = ref("");
 const selectedTodo = ref(null);
 
 const createFormRef = ref(null);
@@ -88,6 +96,7 @@ async function openItemsDialog(list) {
 
 function openAddItemDialog() {
   newTodoTitle.value = "";
+  newTodoDueDate.value = "";
   dialogError.value = "";
   addItemDialog.value = true;
 }
@@ -95,6 +104,7 @@ function openAddItemDialog() {
 function openEditItemDialog(todo) {
   selectedTodo.value = todo;
   editTodoTitle.value = todo.title;
+  editTodoDueDate.value = toDateInputValue(todo.dueDate);
   dialogError.value = "";
   editItemDialog.value = true;
 }
@@ -180,12 +190,16 @@ async function confirmAddItem() {
 
   saving.value = true;
   try {
-    const res = await todoServices.create(selectedList.value.id, {
-      title: newTodoTitle.value.trim(),
-    });
+    const payload = { title: newTodoTitle.value.trim() };
+    const dueDate = newTodoDueDate.value?.trim();
+    if (dueDate) {
+      payload.dueDate = dueDate;
+    }
+    const res = await todoServices.create(selectedList.value.id, payload);
     todos.value = [...todos.value, res.data];
     addItemDialog.value = false;
     newTodoTitle.value = "";
+    newTodoDueDate.value = "";
   } catch (err) {
     dialogError.value =
       err.response?.data?.message || "Unable to create todo.";
@@ -205,6 +219,7 @@ async function confirmEditItem() {
   try {
     const res = await todoServices.update(selectedTodo.value.id, {
       title: editTodoTitle.value.trim(),
+      dueDate: editTodoDueDate.value?.trim() || null,
     });
     todos.value = todos.value.map((todo) =>
       todo.id === res.data.id ? res.data : todo
@@ -483,7 +498,7 @@ onMounted(loadLists);
             No todos in this list yet.
           </p>
 
-          <v-list v-else lines="one" class="bg-transparent">
+          <v-list v-else lines="two" class="bg-transparent">
             <v-list-item v-for="todo in todos" :key="todo.id" class="px-0">
               <template #prepend>
                 <v-checkbox
@@ -502,6 +517,16 @@ onMounted(loadLists);
               >
                 {{ todo.title }}
               </v-list-item-title>
+              <v-list-item-subtitle v-if="todo.dueDate">
+                <span
+                  class="todo-due-date"
+                  :class="{
+                    'text-error todo-due-date--overdue': isTodoOverdue(todo),
+                  }"
+                >
+                  {{ formatDueDate(todo.dueDate) }}
+                </span>
+              </v-list-item-subtitle>
               <template #append>
                 <v-btn
                   icon="mdi-pencil"
@@ -545,13 +570,28 @@ onMounted(loadLists);
             {{ dialogError }}
           </v-alert>
           <v-form ref="addItemFormRef" @submit.prevent="confirmAddItem">
-            <v-text-field
-              v-model="newTodoTitle"
-              label="Todo title"
-              density="comfortable"
-              rounded="lg"
-              :rules="titleRules"
-            />
+            <v-row>
+              <v-col cols="12" md="7">
+                <v-text-field
+                  v-model="newTodoTitle"
+                  label="Todo title"
+                  density="comfortable"
+                  rounded="lg"
+                  :rules="titleRules"
+                />
+              </v-col>
+              <v-col cols="12" md="5">
+                <v-text-field
+                  v-model="newTodoDueDate"
+                  label="Due date"
+                  type="date"
+                  density="comfortable"
+                  rounded="lg"
+                  :rules="optionalDueDateRules"
+                  clearable
+                />
+              </v-col>
+            </v-row>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -591,13 +631,28 @@ onMounted(loadLists);
             {{ dialogError }}
           </v-alert>
           <v-form ref="editItemFormRef" @submit.prevent="confirmEditItem">
-            <v-text-field
-              v-model="editTodoTitle"
-              label="Todo title"
-              density="comfortable"
-              rounded="lg"
-              :rules="titleRules"
-            />
+            <v-row>
+              <v-col cols="12" md="7">
+                <v-text-field
+                  v-model="editTodoTitle"
+                  label="Todo title"
+                  density="comfortable"
+                  rounded="lg"
+                  :rules="titleRules"
+                />
+              </v-col>
+              <v-col cols="12" md="5">
+                <v-text-field
+                  v-model="editTodoDueDate"
+                  label="Due date"
+                  type="date"
+                  density="comfortable"
+                  rounded="lg"
+                  :rules="optionalDueDateRules"
+                  clearable
+                />
+              </v-col>
+            </v-row>
           </v-form>
         </v-card-text>
         <v-card-actions>

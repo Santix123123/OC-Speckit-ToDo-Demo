@@ -33,3 +33,4 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | List CRUD API, `lists` table, Dashboard lists UI, MenuBar | Feature 2 |
 | Todo CRUD API, `todos` table, list-items dialogs on Dashboard | Feature 3 |
 | Profile GET/PUT, MenuBar dropdown, Edit Profile dialog | Feature 4 |
+| Optional todo `dueDate`, add/edit date fields, overdue styling | Feature 5 |

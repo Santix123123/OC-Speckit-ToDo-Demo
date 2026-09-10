@@ -1,6 +1,6 @@
 # Data Model Reference
 
-**Status:** Features 1–4 — `users`, `sessions`, `lists`, and `todos` tables.
+**Status:** Features 1–5 — `users`, `sessions`, `lists`, and `todos` (with optional `dueDate`) tables.
 
 Update this file when a feature that defines schema merges to `dev`.
 
@@ -46,6 +46,7 @@ Update this file when a feature that defines schema merges to `dev`.
 | `listId` | INTEGER FK | Required; references `lists.id`; deleted when parent list is deleted |
 | `title` | STRING(255) | Required; trimmed; max 255 chars |
 | `completed` | BOOLEAN | Default `false` |
+| `dueDate` | DATEONLY | Nullable; optional calendar date (`YYYY-MM-DD`); `null` means no due date |
 | `userId` | INTEGER FK | Required; references `users.id`; set from `req.user.id` on create |
 | `createdAt` | DATE | Sequelize timestamps |
 | `updatedAt` | DATE | Sequelize timestamps |

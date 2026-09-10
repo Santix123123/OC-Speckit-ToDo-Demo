@@ -1,6 +1,6 @@
 # Behavior & Rules Reference
 
-**Living snapshot** of product rules currently in force after Features 1–4.
+**Living snapshot** of product rules currently in force after Features 1–5.
 
 These files answer: *"What rules does the app enforce right now?"*  
 They do **not** authorize new scope — implement only from `features/feature-*.md`.
@@ -55,3 +55,9 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | After profile save, `localStorage` `user` is refreshed and `user-logged-in` is dispatched | `MenuBar.vue` | Feature 4 FR-008 |
 | Edit Profile uses shared `emailRules` | `validation.js` + MenuBar dialog | Feature 4 FR-009 |
 | Logout lives only in the profile dropdown (**Log out**); no menu-bar **Sign out** | `MenuBar.vue` | Feature 4 US-4.3 / US-4.4 |
+| Todo `dueDate` is optional; `null` means no due date | Todo model + create/update | Feature 5 FR-002 |
+| Due dates are calendar-only (`YYYY-MM-DD` / `DATEONLY`) | Todo model + controller | Feature 5 FR-003 |
+| Invalid `dueDate` → `400` `"Due date must be a valid date in YYYY-MM-DD format."` | Todo controller | Feature 5 FR-004 |
+| `PUT` with `dueDate: null` clears the date; omitting `dueDate` leaves it unchanged | Todo controller update | Feature 5 FR-005 / FR-006 |
+| Todo sort order is unchanged by due dates (incomplete first, then `createdAt` ASC) | Todo `findAllForList` | Feature 5 FR-007 |
+| Incomplete todos with `dueDate` before today (local calendar) use overdue styling; completed todos do not | `Dashboard.vue` + `isTodoOverdue` | Feature 5 FR-008 |
