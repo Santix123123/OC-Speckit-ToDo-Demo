@@ -29,4 +29,5 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 
 | Area | Introduced |
 |------|------------|
-| *(none yet)* | Add rows as features merge to `dev` |
+| Users, sessions, auth API, route guards, login/register/home | Feature 1 |
+| `GET /todo/lists` auth stub (`[]`) | Feature 1 (Feature 2 owns list CRUD) |
