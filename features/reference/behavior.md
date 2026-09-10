@@ -1,6 +1,6 @@
 # Behavior & Rules Reference
 
-**Living snapshot** of product rules currently in force after Features 1–2.
+**Living snapshot** of product rules currently in force after Features 1–3.
 
 These files answer: *"What rules does the app enforce right now?"*  
 They do **not** authorize new scope — implement only from `features/feature-*.md`.
@@ -32,4 +32,17 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Lists ordered alphabetically by name | `order: [["name", "ASC"]]` | Feature 2 FR-006 |
 | Cross-user list access → `404` `"List with id=<id> not found."` | `getAccessibleListOrNull` | Feature 2 US-2.5 |
 | Empty lists view shows **"No lists yet. Create your first list."** | `Dashboard.vue` | Feature 2 AC |
-| Row actions: **Edit list** / **Delete list** (icon-only, `size="small"`) | `Dashboard.vue` | Feature 2 Screen Requirements |
+| Row actions: **Items** / **Edit list** / **Delete list** (icon-only, `size="small"`) | `Dashboard.vue` | Features 2–3 Screen Requirements |
+| All todo endpoints require authentication | `authenticate` on todo routes | Feature 3 FR-001 |
+| Todo belongs to one list and one user for its lifetime | Todo model + create path | Feature 3 FR-002 |
+| Every todo read/update/delete scopes by `userId: req.user.id` | `getAccessibleTodoOrNull` | Feature 3 FR-003 |
+| Creating a todo requires owned parent list; else `404` | `getAccessibleListOrNull` before create | Feature 3 FR-004 |
+| On create, `userId` / `listId` from server context only | Todo controller create | Feature 3 FR-005 |
+| Todo titles trimmed; empty rejected; max 255 chars | Controller + client rules | Feature 3 FR-006 |
+| New todos default to `completed: false` | Todo create | Feature 3 FR-007 |
+| Deleting a list deletes its todos | List controller destroys todos then list | Feature 3 FR-008 |
+| Todos ordered incomplete first, then `createdAt` ascending | `order: [["completed","ASC"],["createdAt","ASC"]]` | Feature 3 FR-009 |
+| List-items dialog opened from row **Items** icon; add/edit/delete via nested dialogs | `Dashboard.vue` | Feature 3 FR-010 |
+| Cross-user todo access → `404` `"Todo with id=<id> not found."` | `getAccessibleTodoOrNull` | Feature 3 US-3.5 |
+| Empty items dialog shows **"No todos in this list yet."** | `Dashboard.vue` | Feature 3 AC |
+| Completed todos show struck-through / muted title | `Dashboard.vue` | Feature 3 Screen Requirements |

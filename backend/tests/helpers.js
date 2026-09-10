@@ -43,3 +43,11 @@ export const createList = async (token, name, extra = {}) => {
     .send({ name, ...extra });
   return res;
 };
+
+export const createTodo = async (token, listId, title, extra = {}) => {
+  const res = await request(app)
+    .post(`/todo/lists/${listId}/todos`)
+    .set(authHeader(token))
+    .send({ title, ...extra });
+  return res;
+};

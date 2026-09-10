@@ -3,6 +3,7 @@ import db from "../models/index.js";
 const Session = db.session;
 const User = db.user;
 const List = db.list;
+const Todo = db.todo;
 
 /**
  * Validate Bearer token against the sessions table and attach req.user.
@@ -58,6 +59,22 @@ export async function getAccessibleListOrNull(req, listId) {
   }
 
   const row = await List.findOne({
+    where: { id, userId: req.user.id },
+  });
+
+  return row ?? null;
+}
+
+/**
+ * Return the todo when it belongs to the authenticated user; otherwise null.
+ */
+export async function getAccessibleTodoOrNull(req, todoId) {
+  const id = parseInt(todoId, 10);
+  if (Number.isNaN(id)) {
+    return null;
+  }
+
+  const row = await Todo.findOne({
     where: { id, userId: req.user.id },
   });
 

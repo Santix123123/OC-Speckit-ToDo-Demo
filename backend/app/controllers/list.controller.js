@@ -3,6 +3,7 @@ import logger from "../config/logger.js";
 import { getAccessibleListOrNull } from "../authorization/authorization.js";
 
 const List = db.list;
+const Todo = db.todo;
 const exports = {};
 
 function isBlank(value) {
@@ -96,6 +97,7 @@ exports.delete = async (req, res) => {
         .send({ message: `List with id=${listId} not found.` });
     }
 
+    await Todo.destroy({ where: { listId: list.id } });
     await list.destroy();
     return res.status(200).send({ message: "List deleted." });
   } catch (err) {

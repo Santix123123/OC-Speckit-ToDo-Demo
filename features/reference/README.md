@@ -31,3 +31,4 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 |------|------------|
 | Users, sessions, auth API, route guards, login/register | Feature 1 |
 | List CRUD API, `lists` table, Dashboard lists UI, MenuBar | Feature 2 |
+| Todo CRUD API, `todos` table, list-items dialogs on Dashboard | Feature 3 |
